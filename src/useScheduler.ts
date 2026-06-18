@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
+import { Capacitor } from '@capacitor/core'
 import { db } from './db'
 import { nextFire } from './lib/escalation'
 import type { Tier } from './lib/time'
@@ -10,12 +11,22 @@ const TITLE: Record<Tier, string> = {
   COGO: 'Делай. Сейчас'
 }
 
-// планировщик для открытого приложения: ставит таймеры на ближайшее
-// срабатывание каждой активной задачи и шлёт уведомление
+// Android: нативные локальные уведомления (живут после закрытия).
+// Веб: setTimeout пока вкладка открыта.
 export function useScheduler() {
   const tasks = useLiveQuery(() => db.tasks.where('status').equals('active').toArray(), [], [])
 
   useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      let cancelled = false
+      import('./schedulers/native').then((m) => {
+        if (!cancelled) m.rescheduleNative(tasks)
+      })
+      return () => {
+        cancelled = true
+      }
+    }
+
     if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return
     const now = Date.now()
     const timers: number[] = []
