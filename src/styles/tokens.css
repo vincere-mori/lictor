@@ -1,17 +1,20 @@
 :root {
   --bg: #100f0c;
-  --ink: #ECE6D8;
-  --ink-dim: #8a857a;
-  --ink-faint: #5b574e;
-  --rule: rgba(236, 230, 216, 0.10);
-  --rule-strong: rgba(236, 230, 216, 0.14);
+  --bg-overdue: #1d1410;
 
-  --cool: #6f6a5f;
-  --amber: #E0A340;
-  --red: #D4493F;
-  --red-bright: #E36054;
+  --ink: #F2EEE4;
+  --ink-dim: #bcb6a8;
+  --ink-faint: #928c7d;
 
-  --serif: 'Spectral', Georgia, serif;
-  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --rule: rgba(242, 238, 228, 0.13);
+  --rule-strong: rgba(242, 238, 228, 0.2);
+
+  --amber: #F0AD46;
+  --amber-ink: #1a1205;
+  --red: #E2574B;
+  --red-bright: #F4796D;
+
+  --serif: 'Spectral', Georgia, 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
   --sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
 }
