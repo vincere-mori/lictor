@@ -1,0 +1,17 @@
+:root {
+  --bg: #100f0c;
+  --ink: #ECE6D8;
+  --ink-dim: #8a857a;
+  --ink-faint: #5b574e;
+  --rule: rgba(236, 230, 216, 0.10);
+  --rule-strong: rgba(236, 230, 216, 0.14);
+
+  --cool: #6f6a5f;
+  --amber: #E0A340;
+  --red: #D4493F;
+  --red-bright: #E36054;
+
+  --serif: 'Spectral', Georgia, serif;
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+}
