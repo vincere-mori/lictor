@@ -15,6 +15,7 @@ export default defineConfig(({ command }) => ({
           VitePWA({
             registerType: 'autoUpdate',
             includeAssets: ['icon.svg'],
+            workbox: { globPatterns: ['**/*.{js,css,html,svg,woff2}'] },
             manifest: {
               name: 'Lictor',
               short_name: 'Lictor',

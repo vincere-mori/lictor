@@ -1,6 +1,7 @@
 import Dexie, { type Table } from 'dexie'
 import type { Tier } from './lib/time'
 import { parseInput } from './lib/parse'
+import { bestHour, hourlyResponse } from './lib/brain'
 
 export type TaskStatus = 'active' | 'done'
 
@@ -45,11 +46,18 @@ function uid() {
 export async function addTaskFromText(text: string, now = Date.now()) {
   const parsed = parseInput(text, now)
   if (!parsed) return
+  let due = parsed.due
+  if (!parsed.explicitTime && parsed.daySet) {
+    const events = await db.events.toArray()
+    const d = new Date(parsed.due)
+    d.setHours(bestHour(hourlyResponse(events)), 0, 0, 0)
+    due = d.getTime()
+  }
   const task: Task = {
     id: uid(),
     title: parsed.title,
     tier: parsed.tier,
-    due: parsed.due,
+    due,
     status: 'active',
     createdAt: now,
     snoozes: 0

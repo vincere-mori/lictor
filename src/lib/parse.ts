@@ -4,6 +4,8 @@ export interface Parsed {
   title: string
   due: number
   tier: Tier
+  explicitTime: boolean
+  daySet: boolean
 }
 
 const UNITS: Record<string, number> = {
@@ -37,12 +39,16 @@ export function parseInput(text: string, now = Date.now()): Parsed | null {
   else if (/сегодня/.test(lower)) { dayShift = 0; daySet = true }
 
   let due: number | null = null
+  let explicitTime = false
 
   const rel = lower.match(/через\s+(\d+)\s*([а-яё]+)/)
   if (rel) {
     const n = parseInt(rel[1], 10)
     const key = Object.keys(UNITS).find((u) => rel[2].startsWith(u))
-    if (key) due = now + n * UNITS[key]
+    if (key) {
+      due = now + n * UNITS[key]
+      explicitTime = true
+    }
   }
 
   if (due === null) {
@@ -54,10 +60,12 @@ export function parseInput(text: string, now = Date.now()): Parsed | null {
     if (hm) {
       d.setHours(parseInt(hm[1], 10), parseInt(hm[2], 10))
       due = d.getTime()
+      explicitTime = true
       if (!daySet && due <= now) due += 86400e3
     } else if (hOnly) {
       d.setHours(parseInt(hOnly[1], 10), 0)
       due = d.getTime()
+      explicitTime = true
       if (!daySet && due <= now) due += 86400e3
     } else if (daySet) {
       d.setHours(9, 0)
@@ -77,5 +85,5 @@ export function parseInput(text: string, now = Date.now()): Parsed | null {
     .trim()
   if (!title) title = raw
 
-  return { title, due, tier }
+  return { title, due, tier, explicitTime, daySet }
 }

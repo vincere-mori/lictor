@@ -112,3 +112,24 @@ input { font: inherit; color: inherit; }
 .set-title { font-size: 16px; }
 .set-sub { font-family: var(--mono); font-size: 13px; color: var(--ink-dim); margin-top: 4px; }
 .btn { background: var(--amber); color: var(--amber-ink); border: none; font-family: var(--mono); font-size: 13px; padding: 10px 14px; letter-spacing: 0.04em; }
+
+.hist { display: flex; align-items: flex-end; gap: 2px; height: 92px; margin: 8px 0 6px; }
+.hist-bar { flex: 1; background: #6b6557; min-height: 2px; }
+.hist-bar.peak { background: var(--amber); }
+.hist-axis { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+
+@keyframes lic-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.alarm {
+  position: fixed; inset: 0; z-index: 50;
+  background: #160d0b;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px; padding: 32px; text-align: center;
+}
+.alarm-tier { font-family: var(--mono); font-size: 12px; letter-spacing: 0.28em; color: var(--red-bright); }
+.alarm-title { font-family: var(--serif); font-weight: 800; font-size: 30px; line-height: 1.15; }
+.alarm-clock { font-family: var(--serif); font-weight: 800; font-size: 44px; color: var(--red-bright); animation: lic-pulse 1.2s ease-in-out infinite; }
+.alarm-actions { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+.alarm-done { background: var(--amber); color: var(--amber-ink); border: none; padding: 17px; font-family: var(--mono); font-size: 15px; letter-spacing: 0.04em; }
+.alarm-snooze { position: relative; overflow: hidden; background: transparent; border: 1px solid var(--rule-strong); color: var(--ink-dim); padding: 16px; font-family: var(--mono); font-size: 13px; }
+.alarm-snooze-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: rgba(226, 87, 75, 0.28); }
+.alarm-snooze-label { position: relative; }

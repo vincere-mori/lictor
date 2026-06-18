@@ -12,7 +12,13 @@ const TITLE: Record<Tier, string> = {
 function hash(s: string): number {
   let h = 0
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0
-  return Math.abs(h) % 1_000_00
+  return Math.abs(h) % 100000
+}
+
+async function ensureChannels() {
+  await LocalNotifications.createChannel({ id: 'moneo', name: 'MONEO', description: 'Тихие напоминания', importance: 3, visibility: 1 })
+  await LocalNotifications.createChannel({ id: 'insto', name: 'INSTO', description: 'Настойчивые', importance: 4, vibration: true, visibility: 1 })
+  await LocalNotifications.createChannel({ id: 'cogo', name: 'COGO', description: 'Беспощадные', importance: 5, vibration: true, visibility: 1 })
 }
 
 // пересобрать все локальные уведомления под текущие активные задачи
@@ -22,6 +28,8 @@ export async function rescheduleNative(tasks: Task[]) {
     const req = await LocalNotifications.requestPermissions()
     if (req.display !== 'granted') return
   }
+
+  await ensureChannels()
 
   const pending = await LocalNotifications.getPending()
   if (pending.notifications.length) {
@@ -37,6 +45,7 @@ export async function rescheduleNative(tasks: Task[]) {
         id: hash(t.id) * 10 + i,
         title: TITLE[t.tier],
         body: t.title,
+        channelId: t.tier.toLowerCase(),
         schedule: { at: new Date(at), allowWhileIdle: true }
       })
     })

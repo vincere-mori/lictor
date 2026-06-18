@@ -1,15 +1,17 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
+import { bestWindow, hourlyResponse } from '../lib/brain'
+
+const pad = (h: number) => String(h).padStart(2, '0')
 
 export function Brain() {
   const done = useLiveQuery(() => db.tasks.where('status').equals('done').count(), [], 0)
   const active = useLiveQuery(() => db.tasks.where('status').equals('active').count(), [], 0)
-  const snoozed = useLiveQuery(
-    async () => (await db.tasks.toArray()).reduce((s, t) => s + t.snoozes, 0),
-    [],
-    0
-  )
+  const events = useLiveQuery(() => db.events.toArray(), [], [])
 
+  const scores = hourlyResponse(events)
+  const win = bestWindow(scores)
+  const max = Math.max(1, ...scores)
   const total = done + active
   const rate = total ? Math.round((done / total) * 100) : 0
 
@@ -29,15 +31,27 @@ export function Brain() {
           <div className="card-num">{active}</div>
           <div className="card-cap">активно</div>
         </div>
-        <div className="card">
-          <div className="card-num">{snoozed}</div>
-          <div className="card-cap">переносов</div>
-        </div>
+      </div>
+
+      <div className="seclabel">ОТКЛИК ПО ЧАСАМ</div>
+      <div className="hist">
+        {scores.map((v, h) => {
+          const peak = win ? (h - win.start + 24) % 24 < 3 : false
+          return <div key={h} className={peak ? 'hist-bar peak' : 'hist-bar'} style={{ height: `${Math.round((v / max) * 100)}%` }} />
+        })}
+      </div>
+      <div className="hist-axis">
+        <span>00</span>
+        <span>06</span>
+        <span>12</span>
+        <span>18</span>
+        <span>24</span>
       </div>
 
       <p className="note">
-        Мозг копит реакции на напоминания и со временем подстроит время и напор под тебя.
-        Адаптивная часть появится дальше - сейчас собирается статистика.
+        {win
+          ? `Лучший отклик: ${pad(win.start)}-${pad(win.end)}. Задачи без точного времени Мозг ставит на это окно.`
+          : 'Выполняй задачи - Мозг найдёт твоё лучшее время и будет ставить туда напоминания без точного времени.'}
       </p>
     </div>
   )
