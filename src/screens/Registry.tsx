@@ -35,7 +35,7 @@ export function Registry() {
           </div>
 
           {!active ? null : active.length === 0 ? (
-            <div className="empty">Пусто. Добавь задачу сверху.</div>
+            <div className="empty">Пусто. Жми «+ добавить задачу».</div>
           ) : (
             <div className="list">
               <AnimatePresence initial={false}>

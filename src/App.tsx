@@ -1,24 +1,25 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Registry } from './screens/Registry'
 import { Brain } from './screens/Brain'
 import { Mode } from './screens/Mode'
 import { IconRegistry, IconBrain, IconMode } from './components/icons'
-import { addTaskFromText, db, seedIfEmpty } from './db'
+import { db, seedIfEmpty } from './db'
 import { useUI, type Screen } from './store'
 import { useScheduler } from './useScheduler'
 import { AlarmOverlay } from './components/AlarmOverlay'
 import { Praise } from './components/Praise'
 import { EditSheet } from './components/EditSheet'
+import { AddModal } from './components/AddModal'
+import { BrandMark } from './components/BrandMark'
 
-const LABEL: Record<Screen, string> = { registry: 'РЕЕСТР', brain: 'МОЗГ', mode: 'РЕЖИМ' }
+const LABEL: Record<Screen, string> = { registry: 'ЗАДАЧИ', brain: 'МОЗГ', mode: 'РЕЖИМ' }
 
 export default function App() {
   const screen = useUI((s) => s.screen)
   const setScreen = useUI((s) => s.setScreen)
+  const setAdding = useUI((s) => s.setAdding)
   const theme = useUI((s) => s.theme)
-  const [text, setText] = useState('')
-  const inputRef = useRef<HTMLInputElement>(null)
   const activeCount = useLiveQuery(() => db.tasks.where('status').equals('active').count(), [], 0)
 
   useScheduler()
@@ -29,23 +30,19 @@ export default function App() {
     document.documentElement.dataset.theme = theme
   }, [theme])
 
-  async function submit() {
-    const value = text.trim()
-    if (!value) return
-    setText('')
-    await addTaskFromText(value)
-    inputRef.current?.blur()
-  }
-
   return (
     <div className="app">
       <AlarmOverlay />
       <Praise />
       <EditSheet />
+      <AddModal />
 
       <header className="head">
         <div className="head-top">
-          <span className="wordmark">LICTOR</span>
+          <div className="brand">
+            <BrandMark />
+            <span className="wordmark">LICTOR</span>
+          </div>
           <span className="tagline">sine mora</span>
         </div>
         <div className="rule" />
@@ -56,27 +53,9 @@ export default function App() {
       </header>
 
       {screen === 'registry' ? (
-        <>
-          <form
-            className="capture"
-            onSubmit={(e) => {
-              e.preventDefault()
-              submit()
-            }}
-          >
-            <input
-              ref={inputRef}
-              className="capture-input"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="новая задача…"
-            />
-            <button type="submit" className="add" aria-label="добавить">
-              +
-            </button>
-          </form>
-          <div className="capture-hint">время и важность поймёт само: «зал завтра 18:00 жёстко»</div>
-        </>
+        <button className="add-trigger" onClick={() => setAdding(true)}>
+          + добавить задачу
+        </button>
       ) : null}
 
       <main className="main">
@@ -87,24 +66,15 @@ export default function App() {
 
       <footer className="foot">
         <nav className="nav">
-          <button
-            className={'nav-item' + (screen === 'registry' ? ' active' : '')}
-            onClick={() => setScreen('registry')}
-          >
+          <button className={'nav-item' + (screen === 'registry' ? ' active' : '')} onClick={() => setScreen('registry')}>
             <IconRegistry />
-            <span className="nav-label">РЕЕСТР</span>
+            <span className="nav-label">ЗАДАЧИ</span>
           </button>
-          <button
-            className={'nav-item' + (screen === 'brain' ? ' active' : '')}
-            onClick={() => setScreen('brain')}
-          >
+          <button className={'nav-item' + (screen === 'brain' ? ' active' : '')} onClick={() => setScreen('brain')}>
             <IconBrain />
             <span className="nav-label">МОЗГ</span>
           </button>
-          <button
-            className={'nav-item' + (screen === 'mode' ? ' active' : '')}
-            onClick={() => setScreen('mode')}
-          >
+          <button className={'nav-item' + (screen === 'mode' ? ' active' : '')} onClick={() => setScreen('mode')}>
             <IconMode />
             <span className="nav-label">РЕЖИМ</span>
           </button>

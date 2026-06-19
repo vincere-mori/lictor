@@ -53,6 +53,7 @@ export function TaskRow({ task }: { task: Task }) {
             {task.tier} · {left.text}
             {task.snoozes ? <span className="row-rep"> ↻ ×{task.snoozes}</span> : null}
           </div>
+          {task.quote ? <div className="row-quote">{task.quote}</div> : null}
         </div>
         {left.overdue ? <span className="row-count">{overdueClock(delta)}</span> : null}
         <button

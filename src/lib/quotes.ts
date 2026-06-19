@@ -1,3 +1,5 @@
+import type { Tier } from './time'
+
 export type LineCtx = 'empty' | 'clear' | 'overdue' | 'alarm' | 'done'
 
 export interface Line {
@@ -38,5 +40,17 @@ const LINES: Record<LineCtx, Line[]> = {
 
 export function pickLine(ctx: LineCtx, seed: number): Line {
   const arr = LINES[ctx]
+  return arr[Math.abs(Math.floor(seed)) % arr.length]
+}
+
+// личная строка задачи по её тиру (закрепляется при создании)
+const TASK_LINES: Record<Tier, string[]> = {
+  MONEO: ['Спокойно, но не забудь.', 'Маленький шаг - тоже шаг.', 'Сделай в своё время, но сделай.'],
+  INSTO: ['Не тяни - и не придётся бежать.', 'Сделай, пока это легко.', 'Чем раньше начнёшь, тем меньше давит.'],
+  COGO: ['Без вариантов. Только вперёд.', 'Это не обсуждается - делай.', 'Срыв не входит в план.']
+}
+
+export function quoteForTask(tier: Tier, seed: number): string {
+  const arr = TASK_LINES[tier]
   return arr[Math.abs(Math.floor(seed)) % arr.length]
 }

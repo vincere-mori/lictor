@@ -23,7 +23,7 @@ export function AlarmOverlay() {
 
   if (!task) return null
 
-  const line = pickLine('alarm', task.due)
+  const line = task.quote ?? pickLine('alarm', task.due).text
 
   function stop() {
     if (timer.current) clearInterval(timer.current)
@@ -47,7 +47,7 @@ export function AlarmOverlay() {
     <motion.div className="alarm" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="alarm-tier">COGO · БЕСПОЩАДНО</div>
       <div className="alarm-title">{task.title}</div>
-      <div className="alarm-line">{line.text}</div>
+      <div className="alarm-line">{line}</div>
       <div className="alarm-clock">{overdueClock(task.due - now)}</div>
 
       <div className="alarm-actions">

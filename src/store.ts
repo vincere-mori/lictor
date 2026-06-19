@@ -20,6 +20,8 @@ interface UI {
   setTheme: (t: Theme) => void
   editingId: string | null
   setEditing: (id: string | null) => void
+  adding: boolean
+  setAdding: (v: boolean) => void
 }
 
 export const useUI = create<UI>((set) => ({
@@ -35,5 +37,7 @@ export const useUI = create<UI>((set) => ({
     set({ theme })
   },
   editingId: null,
-  setEditing: (editingId) => set({ editingId })
+  setEditing: (editingId) => set({ editingId }),
+  adding: false,
+  setAdding: (adding) => set({ adding })
 }))
