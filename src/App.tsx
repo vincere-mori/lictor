@@ -8,6 +8,7 @@ import { addTaskFromText, db, seedIfEmpty } from './db'
 import { useUI, type Screen } from './store'
 import { useScheduler } from './useScheduler'
 import { AlarmOverlay } from './components/AlarmOverlay'
+import { Praise } from './components/Praise'
 
 const LABEL: Record<Screen, string> = { registry: 'РЕЕСТР', brain: 'МОЗГ', mode: 'РЕЖИМ' }
 
@@ -34,6 +35,7 @@ export default function App() {
   return (
     <div className="app">
       <AlarmOverlay />
+      <Praise />
       <header className="head">
         <div className="head-top">
           <span className="wordmark">LICTOR</span>

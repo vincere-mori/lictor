@@ -133,3 +133,12 @@ input { font: inherit; color: inherit; }
 .alarm-snooze { position: relative; overflow: hidden; background: transparent; border: 1px solid var(--rule-strong); color: var(--ink-dim); padding: 16px; font-family: var(--mono); font-size: 13px; }
 .alarm-snooze-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: rgba(226, 87, 75, 0.28); }
 .alarm-snooze-label { position: relative; }
+.alarm-line { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--ink-dim); max-width: 320px; }
+
+.creed { padding: 4px 0 12px; }
+.creed-text { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink-dim); line-height: 1.4; }
+.creed-author { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-left: 8px; white-space: nowrap; }
+.creed[data-ctx="overdue"] .creed-text { color: var(--red-bright); }
+
+.praise-wrap { position: fixed; left: 0; right: 0; bottom: 98px; z-index: 40; display: flex; justify-content: center; pointer-events: none; }
+.praise-pill { background: #1b1a16; border: 1px solid var(--rule-strong); color: var(--ink); font-family: var(--mono); font-size: 13px; padding: 10px 16px; }

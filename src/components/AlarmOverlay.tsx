@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { completeTask, db, snoozeTask } from '../db'
 import { overdueClock } from '../lib/time'
+import { pickLine } from '../lib/quotes'
 
 export function AlarmOverlay() {
   const [now, setNow] = useState(() => Date.now())
@@ -21,6 +22,8 @@ export function AlarmOverlay() {
   }, [])
 
   if (!task) return null
+
+  const line = pickLine('alarm', task.due)
 
   function stop() {
     if (timer.current) clearInterval(timer.current)
@@ -44,6 +47,7 @@ export function AlarmOverlay() {
     <motion.div className="alarm" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="alarm-tier">COGO · БЕСПОЩАДНО</div>
       <div className="alarm-title">{task.title}</div>
+      <div className="alarm-line">{line.text}</div>
       <div className="alarm-clock">{overdueClock(task.due - now)}</div>
 
       <div className="alarm-actions">
