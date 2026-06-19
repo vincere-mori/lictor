@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { db, deleteTask } from '../db'
+import { db, deleteTask, ensureGroup } from '../db'
 import { useUI } from '../store'
 import type { Tier } from '../lib/time'
 
@@ -16,25 +16,29 @@ export function EditSheet() {
   const editingId = useUI((s) => s.editingId)
   const setEditing = useUI((s) => s.setEditing)
   const task = useLiveQuery(() => (editingId ? db.tasks.get(editingId) : undefined), [editingId])
+  const groups = useLiveQuery(() => db.groups.toArray(), [], [])
 
   const [title, setTitle] = useState('')
   const [when, setWhen] = useState('')
   const [tier, setTier] = useState<Tier>('INSTO')
+  const [group, setGroup] = useState('')
 
   useEffect(() => {
     if (task) {
       setTitle(task.title)
       setWhen(toLocalInput(task.due))
       setTier(task.tier)
+      setGroup(task.groupId ? (groups.find((g) => g.id === task.groupId)?.name ?? '') : '')
     }
-  }, [task])
+  }, [task, groups])
 
   if (!editingId) return null
 
   async function save() {
     if (!task) return
     const due = when ? new Date(when).getTime() : task.due
-    await db.tasks.update(task.id, { title: title.trim() || task.title, due, tier })
+    const groupId = await ensureGroup(group)
+    await db.tasks.update(task.id, { title: title.trim() || task.title, due, tier, groupId })
     setEditing(null)
   }
 
@@ -55,6 +59,18 @@ export function EditSheet() {
         <div className="sheet-h">ЗАДАЧА</div>
         <input className="field" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="название" />
         <input className="field" type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} />
+        <input
+          className="field"
+          list="edit-groups"
+          value={group}
+          onChange={(e) => setGroup(e.target.value)}
+          placeholder="группа (необязательно)"
+        />
+        <datalist id="edit-groups">
+          {groups.map((g) => (
+            <option key={g.id} value={g.name} />
+          ))}
+        </datalist>
         <div className="tiers">
           {TIERS.map((t) => (
             <button

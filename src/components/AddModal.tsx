@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
 import { motion } from 'framer-motion'
-import { addTask } from '../db'
+import { addTask, db } from '../db'
 import { useUI } from '../store'
 import type { Tier } from '../lib/time'
 
@@ -13,14 +14,17 @@ const TIERS: { id: Tier; hint: string }[] = [
 export function AddModal() {
   const adding = useUI((s) => s.adding)
   const setAdding = useUI((s) => s.setAdding)
+  const groups = useLiveQuery(() => db.groups.toArray(), [], [])
   const [text, setText] = useState('')
   const [tier, setTier] = useState<Tier>('INSTO')
+  const [group, setGroup] = useState('')
   const ref = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (adding) {
       setText('')
       setTier('INSTO')
+      setGroup('')
       const id = setTimeout(() => ref.current?.focus(), 60)
       return () => clearTimeout(id)
     }
@@ -31,7 +35,7 @@ export function AddModal() {
   async function add() {
     const value = text.trim()
     if (!value) return
-    await addTask(value, tier)
+    await addTask(value, tier, group)
     setAdding(false)
   }
 
@@ -68,6 +72,18 @@ export function AddModal() {
           ))}
         </div>
         <div className="tier-hint">{TIERS.find((t) => t.id === tier)?.hint}</div>
+        <input
+          className="field"
+          list="add-groups"
+          value={group}
+          onChange={(e) => setGroup(e.target.value)}
+          placeholder="группа (необязательно), напр. Тренировка"
+        />
+        <datalist id="add-groups">
+          {groups.map((g) => (
+            <option key={g.id} value={g.name} />
+          ))}
+        </datalist>
         <button className="btn" onClick={add}>
           Добавить
         </button>

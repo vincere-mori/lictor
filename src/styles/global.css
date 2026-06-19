@@ -51,6 +51,11 @@ input { font: inherit; color: inherit; }
 
 .list { display: flex; flex-direction: column; }
 .empty { color: var(--ink-dim); font-size: 15px; padding: 28px 2px; }
+.group-h { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-faint); padding: 16px 0 6px; }
+
+.graph { border: 1px solid var(--line); touch-action: none; user-select: none; -webkit-user-select: none; }
+.graph-svg { width: 100%; height: 300px; display: block; }
+.graph-empty { border: 1px solid var(--line); padding: 28px 16px; color: var(--ink-dim); font-size: 14px; }
 
 .rowwrap { position: relative; border-top: 1px solid var(--line); }
 .list > div:first-child .rowwrap { border-top: none; }

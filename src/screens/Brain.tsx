@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 import { bestWindow, hourlyResponse } from '../lib/brain'
+import { TaskGraph } from '../components/TaskGraph'
 
 const pad = (h: number) => String(h).padStart(2, '0')
 
@@ -53,6 +54,14 @@ export function Brain() {
           ? `Лучший отклик: ${pad(win.start)}-${pad(win.end)}. Задачи без точного времени Мозг ставит на это окно.`
           : 'Выполняй задачи - Мозг найдёт твоё лучшее время и будет ставить туда напоминания без точного времени.'}
       </p>
+
+      <div className="seclabel" style={{ padding: '20px 0 6px' }}>
+        <span>СВЯЗИ</span>
+        <span>потяни узлы</span>
+      </div>
+      <div className="graph">
+        <TaskGraph />
+      </div>
     </div>
   )
 }
