@@ -1,20 +1,84 @@
 :root {
-  --bg: #100f0c;
-  --bg-overdue: #1d1410;
-
-  --ink: #F2EEE4;
-  --ink-dim: #bcb6a8;
-  --ink-faint: #928c7d;
-
-  --rule: rgba(242, 238, 228, 0.13);
-  --rule-strong: rgba(242, 238, 228, 0.2);
-
-  --amber: #F0AD46;
-  --amber-ink: #1a1205;
-  --red: #E2574B;
-  --red-bright: #F4796D;
-
   --serif: 'Spectral', Georgia, 'Times New Roman', serif;
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
   --sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+
+  /* алярм всегда драматичный, вне темы */
+  --alarm-bg: #1a0d0a;
+  --alarm-ink: #F5F0E4;
+  --alarm-dim: #cbc3b2;
+  --alarm-hot: #F4796D;
+  --alarm-accent: #F2B23E;
+  --alarm-on-accent: #1a1205;
+
+  /* тема по умолчанию: Чернила (тёмная тёплая) */
+  color-scheme: dark;
+  --bg: #16130d;
+  --surface: #221c14;
+  --ink: #F5F0E4;
+  --ink-dim: #c8c1b0;
+  --ink-faint: #998f7b;
+  --line: rgba(245, 240, 228, 0.12);
+  --line-strong: rgba(245, 240, 228, 0.2);
+  --accent: #F2B23E;
+  --on-accent: #1a1205;
+  --danger: #E05442;
+  --danger-bright: #F47C6A;
+  --overdue-bg: #251410;
+  --t-moneo: #948c79;
+  --hist: #5f5a4c;
+}
+
+[data-theme='slate'] {
+  color-scheme: dark;
+  --bg: #0f1318;
+  --surface: #19202a;
+  --ink: #EEF2F7;
+  --ink-dim: #bcc5d1;
+  --ink-faint: #828c9a;
+  --line: rgba(238, 242, 247, 0.12);
+  --line-strong: rgba(238, 242, 247, 0.2);
+  --accent: #56B7C3;
+  --on-accent: #06222a;
+  --danger: #E8615A;
+  --danger-bright: #F58C82;
+  --overdue-bg: #221317;
+  --t-moneo: #838d9b;
+  --hist: #51606f;
+}
+
+[data-theme='paper'] {
+  color-scheme: light;
+  --bg: #F3ECDC;
+  --surface: #FBF7ED;
+  --ink: #29241A;
+  --ink-dim: #574f3e;
+  --ink-faint: #756b58;
+  --line: rgba(41, 36, 26, 0.16);
+  --line-strong: rgba(41, 36, 26, 0.3);
+  --accent: #AC6D08;
+  --on-accent: #FBF7ED;
+  --danger: #B23120;
+  --danger-bright: #97291B;
+  --overdue-bg: #F0DAD0;
+  --t-moneo: #80755d;
+  --hist: #d2c4a4;
+}
+
+[data-theme='marble'] {
+  color-scheme: light;
+  --bg: #F1F3F6;
+  --surface: #FCFDFE;
+  --ink: #1B2230;
+  --ink-dim: #48515F;
+  --ink-faint: #6e7787;
+  --line: rgba(27, 34, 48, 0.14);
+  --line-strong: rgba(27, 34, 48, 0.26);
+  --accent: #2C6A8C;
+  --on-accent: #FCFDFE;
+  --danger: #B23120;
+  --danger-bright: #8F291C;
+  --overdue-bg: #E9D8D5;
+  --t-moneo: #79828F;
+  --hist: #ccd3dd;
 }

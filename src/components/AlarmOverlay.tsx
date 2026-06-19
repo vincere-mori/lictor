@@ -62,7 +62,7 @@ export function AlarmOverlay() {
           onPointerCancel={stop}
         >
           <span className="alarm-snooze-fill" style={{ width: `${Math.round(hold * 100)}%` }} />
-          <span className="alarm-snooze-label">держи, чтобы отложить</span>
+          <span className="alarm-snooze-label">держи: позже на 10 мин</span>
         </button>
       </div>
     </motion.div>

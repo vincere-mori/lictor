@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react'
 import type { Task } from '../db'
 import { completeTask, snoozeTask } from '../db'
 import { formatLeft, overdueClock } from '../lib/time'
+import { useUI } from '../store'
 
 export function TaskRow({ task }: { task: Task }) {
   const [now, setNow] = useState(() => Date.now())
   const x = useMotionValue(0)
+  const setEditing = useUI((s) => s.setEditing)
 
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 1000)
@@ -35,7 +37,7 @@ export function TaskRow({ task }: { task: Task }) {
   return (
     <div className="rowwrap">
       <div className="rowaction left">готово</div>
-      <div className="rowaction right">отложить</div>
+      <div className="rowaction right">позже</div>
       <motion.div
         className={left.overdue ? 'row row-overdue' : 'row'}
         style={{ x, touchAction: 'pan-y' }}
@@ -45,7 +47,7 @@ export function TaskRow({ task }: { task: Task }) {
         onDragEnd={(_, info) => handleEnd(info.offset.x)}
       >
         <span className="row-bar" data-tier={task.tier} />
-        <div className="row-body">
+        <div className="row-body" onClick={() => setEditing(task.id)}>
           <div className="row-title">{task.title}</div>
           <div className="row-meta" data-tier={task.tier}>
             {task.tier} · {left.text}
@@ -57,7 +59,10 @@ export function TaskRow({ task }: { task: Task }) {
           className="row-box"
           data-tier={task.tier}
           aria-label="отметить выполненным"
-          onClick={() => completeTask(task.id)}
+          onClick={(e) => {
+            e.stopPropagation()
+            completeTask(task.id)
+          }}
         />
       </motion.div>
     </div>
