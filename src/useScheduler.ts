@@ -2,8 +2,9 @@ import { useEffect } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Capacitor } from '@capacitor/core'
 import { db } from './db'
-import { nextFire } from './lib/escalation'
+import { nextFire, occurrences } from './lib/escalation'
 import type { Tier } from './lib/time'
+import { pushConfigured, pushEnabled, syncPush, type PushOcc } from './push'
 
 const TITLE: Record<Tier, string> = {
   MONEO: 'Напоминаю',
@@ -12,7 +13,7 @@ const TITLE: Record<Tier, string> = {
 }
 
 // Android: нативные локальные уведомления (живут после закрытия).
-// Веб: setTimeout пока вкладка открыта.
+// Веб: setTimeout пока вкладка открыта + синк расписания на пуш-бэкенд (для закрытого iPhone).
 export function useScheduler() {
   const tasks = useLiveQuery(() => db.tasks.where('status').equals('active').toArray(), [], [])
 
@@ -27,8 +28,19 @@ export function useScheduler() {
       }
     }
 
-    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return
     const now = Date.now()
+
+    if (pushConfigured() && pushEnabled()) {
+      const list: PushOcc[] = []
+      for (const t of tasks) {
+        for (const fireAt of occurrences(t.due, t.tier).filter((x) => x > now).slice(0, 6)) {
+          list.push({ fireAt, title: t.title, tier: t.tier })
+        }
+      }
+      syncPush(list)
+    }
+
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return
     const timers: number[] = []
     for (const t of tasks) {
       const fire = nextFire(t.due, t.tier, now)

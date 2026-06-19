@@ -13,16 +13,19 @@ export default defineConfig(({ command }) => ({
       ? []
       : [
           VitePWA({
+            strategies: 'injectManifest',
+            srcDir: 'src',
+            filename: 'sw.ts',
             registerType: 'autoUpdate',
             includeAssets: ['icon.svg'],
-            workbox: { globPatterns: ['**/*.{js,css,html,svg,woff2}'] },
+            injectManifest: { globPatterns: ['**/*.{js,css,html,svg,woff2}'] },
             manifest: {
               name: 'Lictor',
               short_name: 'Lictor',
               description: 'Агрессивный менеджер напоминаний',
               lang: 'ru',
-              theme_color: '#100f0c',
-              background_color: '#100f0c',
+              theme_color: '#16130d',
+              background_color: '#16130d',
               display: 'standalone',
               start_url: '/lictor/',
               scope: '/lictor/',

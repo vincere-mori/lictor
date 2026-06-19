@@ -1,0 +1,4 @@
+# замени на свой сабдомен; Caddy сам получит TLS-сертификат
+push.example.com {
+    reverse_proxy 127.0.0.1:8000
+}
