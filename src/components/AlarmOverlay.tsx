@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { completeTask, db, snoozeTask } from '../db'
 import { overdueClock } from '../lib/time'
 import { pickLine } from '../lib/quotes'
+import { haptic } from '../lib/haptics'
 
 export function AlarmOverlay() {
   const [now, setNow] = useState(() => Date.now())
@@ -51,7 +52,13 @@ export function AlarmOverlay() {
       <div className="alarm-clock">{overdueClock(task.due - now)}</div>
 
       <div className="alarm-actions">
-        <button className="alarm-done" onClick={() => completeTask(task.id)}>
+        <button
+          className="alarm-done"
+          onClick={() => {
+            haptic('medium')
+            completeTask(task.id)
+          }}
+        >
           Сделал
         </button>
         <button

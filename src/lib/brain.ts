@@ -38,3 +38,42 @@ export function bestWindow(scores: number[]): { start: number; end: number; shar
   }
   return { start: bs, end: (bs + 3) % 24, share: Math.round((bsum / total) * 100) }
 }
+
+function dayStart(ts: number): number {
+  const d = new Date(ts)
+  d.setHours(0, 0, 0, 0)
+  return d.getTime()
+}
+
+// выполнено сегодня
+export function todayDone(events: BrainEvent[], now = Date.now()): number {
+  const s = dayStart(now)
+  return events.filter((e) => e.type === 'done' && e.ts >= s).length
+}
+
+const DOW = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб']
+
+// выполнено по дням за последние `days` дней (старые -> новые)
+export function dailyDone(events: BrainEvent[], days = 7, now = Date.now()): { label: string; count: number }[] {
+  const out: { label: string; count: number }[] = []
+  const base = dayStart(now)
+  for (let i = days - 1; i >= 0; i--) {
+    const s = base - i * 86400000
+    const e = s + 86400000
+    const count = events.filter((ev) => ev.type === 'done' && ev.ts >= s && ev.ts < e).length
+    out.push({ label: DOW[new Date(s).getDay()], count })
+  }
+  return out
+}
+
+// сколько дней подряд (считая от сегодня назад) есть хотя бы одна выполненная
+export function streak(events: BrainEvent[], now = Date.now()): number {
+  const days = new Set(events.filter((e) => e.type === 'done').map((e) => dayStart(e.ts)))
+  let s = 0
+  let d = dayStart(now)
+  while (days.has(d)) {
+    s++
+    d -= 86400000
+  }
+  return s
+}

@@ -3,12 +3,19 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { motion } from 'framer-motion'
 import { addTask, db } from '../db'
 import { useUI } from '../store'
+import { haptic } from '../lib/haptics'
 import type { Tier } from '../lib/time'
 
 const TIERS: { id: Tier; hint: string }[] = [
   { id: 'MONEO', hint: 'тихо - один спокойный пинг' },
   { id: 'INSTO', hint: 'напор - повторы, тон жёстче' },
   { id: 'COGO', hint: 'беспощадно - full-screen алярм' }
+]
+
+const CHIPS: { label: string; phrase: string }[] = [
+  { label: '+1 ч', phrase: 'через 1 час' },
+  { label: 'сегодня вечер', phrase: 'сегодня 19:00' },
+  { label: 'завтра утро', phrase: 'завтра 9:00' }
 ]
 
 export function AddModal() {
@@ -35,8 +42,15 @@ export function AddModal() {
   async function add() {
     const value = text.trim()
     if (!value) return
+    haptic('medium')
     await addTask(value, tier, group)
     setAdding(false)
+  }
+
+  function chip(phrase: string) {
+    haptic('light')
+    setText((t) => (t.trim() ? `${t.trim()} ${phrase}` : phrase))
+    ref.current?.focus()
   }
 
   return (
@@ -59,13 +73,23 @@ export function AddModal() {
           }}
           placeholder="что сделать? напр. «зал завтра 18:00»"
         />
+        <div className="chips">
+          {CHIPS.map((c) => (
+            <button key={c.label} className="chip" onClick={() => chip(c.phrase)}>
+              {c.label}
+            </button>
+          ))}
+        </div>
         <div className="tiers">
           {TIERS.map((t) => (
             <button
               key={t.id}
               className={'tierbtn' + (tier === t.id ? ' on' : '')}
               data-tier={t.id}
-              onClick={() => setTier(t.id)}
+              onClick={() => {
+                haptic('light')
+                setTier(t.id)
+              }}
             >
               {t.id}
             </button>

@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { bestHour, bestWindow, hourlyResponse, type BrainEvent } from './brain'
+import { bestHour, bestWindow, dailyDone, hourlyResponse, streak, todayDone, type BrainEvent } from './brain'
 
 function done(hour: number): BrainEvent {
   return { type: 'done', ts: new Date(2026, 5, 18, hour, 30, 0).getTime() }
@@ -29,4 +29,23 @@ test('bestWindow finds the busy span', () => {
   expect(w).not.toBeNull()
   expect(w!.start).toBe(8)
   expect(w!.share).toBe(100)
+})
+
+const NOW = new Date(2026, 5, 18, 12, 0, 0).getTime()
+const dayAgo = (n: number): BrainEvent => ({ type: 'done', ts: NOW - n * 86400000 })
+
+test('todayDone counts only today', () => {
+  expect(todayDone([dayAgo(0), dayAgo(1), { type: 'created', ts: NOW }], NOW)).toBe(1)
+})
+
+test('streak counts consecutive days back from today', () => {
+  expect(streak([dayAgo(0), dayAgo(1), dayAgo(2)], NOW)).toBe(3)
+  expect(streak([dayAgo(0), dayAgo(2)], NOW)).toBe(1)
+  expect(streak([dayAgo(1)], NOW)).toBe(0)
+})
+
+test('dailyDone has fixed length and today is last', () => {
+  const days = dailyDone([dayAgo(0)], 7, NOW)
+  expect(days.length).toBe(7)
+  expect(days[6].count).toBe(1)
 })

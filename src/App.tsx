@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Registry } from './screens/Registry'
 import { Brain } from './screens/Brain'
 import { Mode } from './screens/Mode'
@@ -13,8 +14,14 @@ import { EditSheet } from './components/EditSheet'
 import { AddModal } from './components/AddModal'
 import { BrandMark } from './components/BrandMark'
 import { Onboarding } from './components/Onboarding'
+import { haptic } from './lib/haptics'
 
 const LABEL: Record<Screen, string> = { registry: 'ЗАДАЧИ', brain: 'МОЗГ', mode: 'РЕЖИМ' }
+const NAV: { id: Screen; label: string; Icon: typeof IconRegistry }[] = [
+  { id: 'registry', label: 'ЗАДАЧИ', Icon: IconRegistry },
+  { id: 'brain', label: 'МОЗГ', Icon: IconBrain },
+  { id: 'mode', label: 'РЕЖИМ', Icon: IconMode }
+]
 
 export default function App() {
   const screen = useUI((s) => s.screen)
@@ -30,6 +37,12 @@ export default function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = theme
   }, [theme])
+
+  function go(s: Screen) {
+    if (s === screen) return
+    haptic('light')
+    setScreen(s)
+  }
 
   return (
     <div className="app">
@@ -55,31 +68,41 @@ export default function App() {
       </header>
 
       {screen === 'registry' ? (
-        <button className="add-trigger" onClick={() => setAdding(true)}>
+        <motion.button className="add-trigger" whileTap={{ scale: 0.985 }} onClick={() => { haptic('light'); setAdding(true) }}>
           + добавить задачу
-        </button>
+        </motion.button>
       ) : null}
 
       <main className="main">
-        {screen === 'registry' ? <Registry /> : null}
-        {screen === 'brain' ? <Brain /> : null}
-        {screen === 'mode' ? <Mode /> : null}
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={screen}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.16 }}
+          >
+            {screen === 'registry' ? <Registry /> : null}
+            {screen === 'brain' ? <Brain /> : null}
+            {screen === 'mode' ? <Mode /> : null}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       <footer className="foot">
         <nav className="nav">
-          <button className={'nav-item' + (screen === 'registry' ? ' active' : '')} onClick={() => setScreen('registry')}>
-            <IconRegistry />
-            <span className="nav-label">ЗАДАЧИ</span>
-          </button>
-          <button className={'nav-item' + (screen === 'brain' ? ' active' : '')} onClick={() => setScreen('brain')}>
-            <IconBrain />
-            <span className="nav-label">МОЗГ</span>
-          </button>
-          <button className={'nav-item' + (screen === 'mode' ? ' active' : '')} onClick={() => setScreen('mode')}>
-            <IconMode />
-            <span className="nav-label">РЕЖИМ</span>
-          </button>
+          {NAV.map(({ id, label, Icon }) => (
+            <motion.button
+              key={id}
+              className={'nav-item' + (screen === id ? ' active' : '')}
+              whileTap={{ scale: 0.92 }}
+              onClick={() => go(id)}
+            >
+              {screen === id ? <motion.span layoutId="navind" className="nav-ind" /> : null}
+              <Icon />
+              <span className="nav-label">{label}</span>
+            </motion.button>
+          ))}
         </nav>
       </footer>
     </div>

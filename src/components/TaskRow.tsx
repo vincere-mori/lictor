@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import type { Task } from '../db'
 import { completeTask, snoozeTask } from '../db'
 import { formatLeft, overdueClock } from '../lib/time'
+import { haptic } from '../lib/haptics'
 import { useUI } from '../store'
 
 export function TaskRow({ task }: { task: Task }) {
@@ -10,13 +11,26 @@ export function TaskRow({ task }: { task: Task }) {
   const x = useMotionValue(0)
   const setEditing = useUI((s) => s.setEditing)
 
+  // адаптивный тикер: 1с когда близко/просрочено, иначе 30с - меньше ре-рендеров
   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(id)
-  }, [])
+    let id: number
+    const tick = () => {
+      setNow(Date.now())
+      const d = task.due - Date.now()
+      id = window.setTimeout(tick, d <= 120000 ? 1000 : 30000)
+    }
+    const d0 = task.due - Date.now()
+    id = window.setTimeout(tick, d0 <= 120000 ? 1000 : 30000)
+    return () => clearTimeout(id)
+  }, [task.due])
 
   const delta = task.due - now
   const left = formatLeft(delta)
+
+  function done() {
+    haptic('medium')
+    completeTask(task.id)
+  }
 
   function settle() {
     animate(x, 0, { type: 'spring', stiffness: 500, damping: 40 })
@@ -25,8 +39,9 @@ export function TaskRow({ task }: { task: Task }) {
   function handleEnd(offsetX: number) {
     if (offsetX > 90) {
       animate(x, 380, { duration: 0.18 })
-      completeTask(task.id)
+      done()
     } else if (offsetX < -90) {
+      haptic('light')
       snoozeTask(task.id)
       settle()
     } else {
@@ -62,7 +77,7 @@ export function TaskRow({ task }: { task: Task }) {
           aria-label="отметить выполненным"
           onClick={(e) => {
             e.stopPropagation()
-            completeTask(task.id)
+            done()
           }}
         />
       </motion.div>
