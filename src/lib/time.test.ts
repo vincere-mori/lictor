@@ -19,4 +19,5 @@ test('overdue', () => {
 test('overdue clock', () => {
   expect(overdueClock(-(12 * 60_000 + 24_000))).toBe('−12:24')
   expect(overdueClock(-9000)).toBe('−0:09')
+  expect(overdueClock(-(2 * 3600_000 + 5 * 60_000 + 30_000))).toBe('−2:05:30')
 })

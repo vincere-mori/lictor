@@ -5,6 +5,14 @@ declare const self: ServiceWorkerGlobalScope & { __WB_MANIFEST: Array<{ url: str
 
 precacheAndRoute(self.__WB_MANIFEST)
 
+// новый SW сразу берёт управление - иначе клиенты застревают на старой версии
+self.addEventListener('install', () => {
+  self.skipWaiting()
+})
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim())
+})
+
 self.addEventListener('push', (event) => {
   let data: { title?: string; body?: string; tag?: string } = {}
   try {
