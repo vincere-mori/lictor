@@ -1,28 +1,15 @@
 import { animate, motion, useMotionValue } from 'framer-motion'
-import { useEffect, useState } from 'react'
 import type { Task } from '../db'
 import { completeTask, snoozeTask } from '../db'
 import { formatLeft, overdueClock } from '../lib/time'
 import { haptic } from '../lib/haptics'
+import { useNowMinute } from '../clock'
 import { useUI } from '../store'
 
 export function TaskRow({ task }: { task: Task }) {
-  const [now, setNow] = useState(() => Date.now())
+  const now = useNowMinute()
   const x = useMotionValue(0)
   const setEditing = useUI((s) => s.setEditing)
-
-  // адаптивный тикер: 1с когда близко/просрочено, иначе 30с - меньше ре-рендеров
-  useEffect(() => {
-    let id: number
-    const tick = () => {
-      setNow(Date.now())
-      const d = task.due - Date.now()
-      id = window.setTimeout(tick, d <= 120000 ? 1000 : 30000)
-    }
-    const d0 = task.due - Date.now()
-    id = window.setTimeout(tick, d0 <= 120000 ? 1000 : 30000)
-    return () => clearTimeout(id)
-  }, [task.due])
 
   const delta = task.due - now
   const left = formatLeft(delta)

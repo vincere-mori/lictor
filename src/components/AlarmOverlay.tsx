@@ -1,26 +1,24 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { completeTask, db, snoozeTask } from '../db'
 import { overdueClock } from '../lib/time'
 import { pickLine } from '../lib/quotes'
 import { haptic } from '../lib/haptics'
+import { useNow } from '../clock'
 
 export function AlarmOverlay() {
-  const [now, setNow] = useState(() => Date.now())
+  const now = useNow()
   const [hold, setHold] = useState(0)
   const timer = useRef<number | null>(null)
 
-  const task = useLiveQuery(async () => {
-    const active = await db.tasks.where('status').equals('active').toArray()
-    const t = Date.now()
-    return active.filter((x) => x.tier === 'COGO' && x.due <= t).sort((a, b) => a.due - b.due)[0] ?? null
-  })
+  const cogos = useLiveQuery(
+    () => db.tasks.where('status').equals('active').filter((t) => t.tier === 'COGO').toArray(),
+    [],
+    []
+  )
 
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(id)
-  }, [])
+  const task = cogos.filter((t) => t.due <= now).sort((a, b) => a.due - b.due)[0] ?? null
 
   if (!task) return null
 
