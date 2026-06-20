@@ -16,6 +16,7 @@ function currentPerm(): NotificationPermission {
 export function Mode() {
   const theme = useUI((s) => s.theme)
   const setTheme = useUI((s) => s.setTheme)
+  const setOnboarding = useUI((s) => s.setOnboarding)
   const [perm, setPerm] = useState<NotificationPermission>(currentPerm)
   const [pushOn, setPushOn] = useState(pushEnabled())
   const [pushNote, setPushNote] = useState('')
@@ -96,6 +97,16 @@ export function Mode() {
           <div className="set-title">Установка</div>
           <div className="set-sub">{standalone ? 'установлено как приложение' : 'добавь на экран Домой'}</div>
         </div>
+      </div>
+
+      <div className="set-row">
+        <div>
+          <div className="set-title">Обучение</div>
+          <div className="set-sub">как пользоваться</div>
+        </div>
+        <button className="btn" onClick={() => setOnboarding(true)}>
+          Показать
+        </button>
       </div>
 
       <p className="note">

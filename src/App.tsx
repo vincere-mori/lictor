@@ -12,6 +12,7 @@ import { Praise } from './components/Praise'
 import { EditSheet } from './components/EditSheet'
 import { AddModal } from './components/AddModal'
 import { BrandMark } from './components/BrandMark'
+import { Onboarding } from './components/Onboarding'
 
 const LABEL: Record<Screen, string> = { registry: 'ЗАДАЧИ', brain: 'МОЗГ', mode: 'РЕЖИМ' }
 
@@ -36,6 +37,7 @@ export default function App() {
       <Praise />
       <EditSheet />
       <AddModal />
+      <Onboarding />
 
       <header className="head">
         <div className="head-top">

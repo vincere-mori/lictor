@@ -13,6 +13,14 @@ function savedTheme(): Theme {
   return 'ink'
 }
 
+function onboarded(): boolean {
+  try {
+    return localStorage.getItem('lictor-onboarded') === '1'
+  } catch {
+    return true
+  }
+}
+
 interface UI {
   screen: Screen
   setScreen: (s: Screen) => void
@@ -22,6 +30,8 @@ interface UI {
   setEditing: (id: string | null) => void
   adding: boolean
   setAdding: (v: boolean) => void
+  onboarding: boolean
+  setOnboarding: (v: boolean) => void
 }
 
 export const useUI = create<UI>((set) => ({
@@ -39,5 +49,16 @@ export const useUI = create<UI>((set) => ({
   editingId: null,
   setEditing: (editingId) => set({ editingId }),
   adding: false,
-  setAdding: (adding) => set({ adding })
+  setAdding: (adding) => set({ adding }),
+  onboarding: !onboarded(),
+  setOnboarding: (v) => {
+    if (!v) {
+      try {
+        localStorage.setItem('lictor-onboarded', '1')
+      } catch {
+        // игнор
+      }
+    }
+    set({ onboarding: v })
+  }
 }))

@@ -135,6 +135,25 @@ input { font: inherit; color: inherit; }
 .praise-wrap { position: fixed; left: 0; right: 0; bottom: 98px; z-index: 40; display: flex; justify-content: center; pointer-events: none; }
 .praise-pill { background: var(--surface); border: 1px solid var(--line-strong); color: var(--ink); font-family: var(--mono); font-size: 13px; padding: 10px 16px; }
 
+.onb { position: fixed; inset: 0; z-index: 60; background: var(--bg); display: flex; flex-direction: column; padding: calc(env(safe-area-inset-top) + 20px) 24px calc(env(safe-area-inset-bottom) + 24px); }
+.onb-skip { align-self: flex-end; background: transparent; border: 0; color: var(--ink-faint); font-family: var(--mono); font-size: 12px; }
+.onb-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.onb-title { font-family: var(--serif); font-weight: 800; font-size: 32px; margin-top: 20px; }
+.onb-text { font-size: 16px; color: var(--ink-dim); line-height: 1.6; margin-top: 10px; max-width: 340px; }
+.onb-brand { display: flex; align-items: center; gap: 12px; }
+.onb-mark { font-family: var(--serif); font-weight: 800; font-size: 26px; letter-spacing: 0.14em; }
+.onb-tiers { display: flex; flex-direction: column; gap: 14px; }
+.onb-tiers > div { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 14px; color: var(--ink); }
+.onb-bar { width: 5px; height: 26px; flex: 0 0 auto; }
+.onb-gest { display: flex; flex-direction: column; gap: 14px; font-size: 17px; color: var(--ink); }
+.onb-gest b { font-size: 22px; margin-right: 10px; }
+.onb-plus { font-size: 56px; color: var(--accent); line-height: 1; }
+.onb-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.onb-dots { display: flex; gap: 7px; }
+.onb-dots span { width: 7px; height: 7px; background: var(--line-strong); }
+.onb-dots span.on { background: var(--accent); }
+.onb-next { min-width: 124px; }
+
 .modal-back { position: fixed; inset: 0; z-index: 46; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; padding: 24px; }
 .modal { width: 100%; max-width: 380px; background: var(--bg); border: 1px solid var(--line-strong); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
 .tier-hint { font-family: var(--mono); font-size: 12px; color: var(--ink-dim); margin-top: -4px; }
