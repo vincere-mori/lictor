@@ -63,7 +63,7 @@ export function Brain() {
 
       <div className="seclabel" style={{ padding: '20px 0 6px' }}>
         <span>СВЯЗИ</span>
-        <span>потяни узлы</span>
+        <span>наведи · потяни</span>
       </div>
       <div className="graph">
         <TaskGraph />

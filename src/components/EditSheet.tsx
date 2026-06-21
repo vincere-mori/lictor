@@ -32,6 +32,20 @@ export function EditSheet() {
     }
   }, [task, groups])
 
+  useEffect(() => {
+    if (!editingId) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setEditing(null)
+      else if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault()
+        save()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingId, title, when, tier, group, task])
+
   if (!editingId) return null
 
   async function save() {
