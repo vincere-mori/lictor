@@ -16,8 +16,22 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            def ksPwd = System.getenv("LICTOR_KEYSTORE_PASSWORD")
+            if (ksPwd != null) {
+                storeFile file(System.getenv("LICTOR_KEYSTORE_FILE") ?: "lictor-release.jks")
+                storePassword ksPwd
+                keyAlias System.getenv("LICTOR_KEY_ALIAS")
+                keyPassword System.getenv("LICTOR_KEY_PASSWORD")
+            }
+        }
+    }
     buildTypes {
         release {
+            if (System.getenv("LICTOR_KEYSTORE_PASSWORD") != null) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

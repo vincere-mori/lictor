@@ -8,3 +8,9 @@ coverage
 .env.*
 .DS_Store
 *.keystore
+
+# android signing / local
+android/keystore/
+android/app/*.jks
+android/local.properties
+*.keystore
