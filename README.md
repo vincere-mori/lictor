@@ -9,6 +9,9 @@
   <a href="https://github.com/vincere-mori/lictor/releases/latest">
     <img src="https://img.shields.io/badge/download%20apk-1f8f5f?style=for-the-badge&logo=android&logoColor=white" />
   </a>
+  <a href="https://www.rustore.ru/catalog/app/com.vinceremori.lictor">
+    <img src="https://img.shields.io/badge/RuStore-0077FF?style=for-the-badge&logo=rustore&logoColor=white" alt="RuStore" />
+  </a>
 </p>
 
 ## Идея
