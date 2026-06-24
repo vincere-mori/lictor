@@ -104,14 +104,14 @@ export function Onboarding() {
         </AnimatePresence>
       </div>
       <div className="onb-foot">
+        <button className="btn onb-next" onClick={next}>
+          {last ? 'Начать' : 'Дальше'}
+        </button>
         <div className="onb-dots">
           {STEPS.map((_, d) => (
             <span key={d} className={d === i ? 'on' : ''} />
           ))}
         </div>
-        <button className="btn onb-next" onClick={next}>
-          {last ? 'Начать' : 'Дальше'}
-        </button>
       </div>
     </div>
   )

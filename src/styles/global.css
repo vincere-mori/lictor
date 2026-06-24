@@ -148,7 +148,7 @@ input { font: inherit; color: inherit; }
 .praise-pill { background: var(--surface); border: 1px solid var(--line-strong); color: var(--ink); font-family: var(--mono); font-size: 13px; padding: 10px 16px; }
 
 .onb { position: fixed; inset: 0; z-index: 60; background: var(--bg); display: flex; flex-direction: column; padding: calc(env(safe-area-inset-top) + 20px) 24px calc(env(safe-area-inset-bottom) + 24px); }
-.onb-skip { align-self: flex-end; background: transparent; border: 0; color: var(--ink-faint); font-family: var(--mono); font-size: 12px; }
+.onb-skip { align-self: flex-start; background: transparent; border: 0; color: var(--ink-faint); font-family: var(--mono); font-size: 12px; }
 .onb-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .onb-title { font-family: var(--serif); font-weight: 800; font-size: 32px; margin-top: 20px; }
 .onb-text { font-size: 16px; color: var(--ink-dim); line-height: 1.6; margin-top: 10px; max-width: 340px; }
