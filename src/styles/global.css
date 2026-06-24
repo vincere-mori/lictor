@@ -160,7 +160,7 @@ input { font: inherit; color: inherit; }
 .onb-gest { display: flex; flex-direction: column; gap: 14px; font-size: 17px; color: var(--ink); }
 .onb-gest b { font-size: 22px; margin-right: 10px; }
 .onb-plus { font-size: 56px; color: var(--accent); line-height: 1; }
-.onb-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.onb-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
 .onb-dots { display: flex; gap: 7px; }
 .onb-dots span { width: 7px; height: 7px; background: var(--line-strong); }
 .onb-dots span.on { background: var(--accent); }
