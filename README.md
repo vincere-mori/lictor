@@ -3,7 +3,7 @@
 Агрессивный менеджер напоминаний и задач, который не отстаёт. Эскалация по тирам **MONEO → INSTO → COGO** и адаптивный «Мозг», который учится, когда и как тебя дожимать.
 
 <p>
-  <a href="https://lictor-psi.vercel.app/">
+  <a href="https://sinemora.vercel.app/">
     <img src="https://img.shields.io/badge/live%20demo-000?style=for-the-badge&logo=vercel&logoColor=white" />
   </a>
   <a href="https://github.com/vincere-mori/lictor/releases/latest">
