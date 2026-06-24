@@ -4,9 +4,11 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {}
 const cap = env.LICTOR_TARGET === 'cap'
+const isVercel = !!env.VERCEL
+const webBase = isVercel ? '/' : '/lictor/'
 
 export default defineConfig(({ command }) => ({
-  base: cap ? './' : command === 'build' ? '/lictor/' : '/',
+  base: cap ? './' : (command === 'build' && !isVercel) ? '/lictor/' : '/',
   plugins: [
     react(),
     ...(cap
@@ -27,8 +29,8 @@ export default defineConfig(({ command }) => ({
               theme_color: '#16130d',
               background_color: '#16130d',
               display: 'standalone',
-              start_url: '/lictor/',
-              scope: '/lictor/',
+              start_url: webBase,
+              scope: webBase,
               icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' }]
             }
           })
